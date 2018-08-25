@@ -1,0 +1,31 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "moment": "^2.22.2",
+    "query-string": "^6.1.0",
+    "radium": "^0.24.1",
+    "react": "^16.0.0-beta.2",
+    "react-addons-css-transition-group": "^15.6.0",
+    "react-addons-shallow-compare": "^15.6.0",
+    "react-calendar": "^2.17.1",
+    "react-dom": "^16.0.0-beta.2",
+    "react-dom-factories": "^1.0.0",
+    "react-icons": "^3.0.5",
+    "react-responsive-modal": "^3.2.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "react-selectize": "^3.0.1",
+    "react-transition-group": "^1.1.2",
+    "reactstrap": "^6.4.0",
+    "spectre.css": "^0.5.3"
+  },
+  "scripts": {
+    "start": "set PORT=5000 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
