@@ -19,6 +19,14 @@ namespace Hackathon.Domain.Test.Service
             Assert.AreEqual(ResponseTypeEnum.Success, agendaService.ResponseService.Type);
         }
 
+        [TestMethod, TestCategory("[Agenda] 2. Service Agenda")]
+        public void Agenda_Get_Clinica()
+        {
+            var agenda = agendaService.GetAgendaClinica(1, 1, "26/08/2018");
+
+            Assert.AreEqual(ResponseTypeEnum.Success, agendaService.ResponseService.Type);
+        }
+
         [TestMethod, TestCategory("[Agenda] 1. Service Agenda")]
         public void Agenda_Add_ComSucesso()
         {

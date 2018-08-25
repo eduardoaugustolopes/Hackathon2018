@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
 
     agendaConfirmado: {
         fontSize: 14,
-        color: '#0f0',
+        color: '#067817',
         alignItems: 'flex-end',
         fontWeight: 'bold',
     },

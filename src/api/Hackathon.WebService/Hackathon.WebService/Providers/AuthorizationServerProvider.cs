@@ -14,6 +14,7 @@ namespace Hackathon.WebService.Providers
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider
     {
         private PacienteService _pacienteService = new PacienteService();
+        private ClinicaService _clinicaService = new ClinicaService();
 
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
@@ -47,12 +48,12 @@ namespace Hackathon.WebService.Providers
                 }
                 else
                 {
-                    var usuarioVM = _pacienteService.Get(context.UserName, context.Password);
+                    var usuarioVM = _clinicaService.Get(context.UserName, context.Password);
                     if (usuarioVM.Id != 0)
                     {
                         var identity = new ClaimsIdentity(context.Options.AuthenticationType);
                         var claims = new List<string>();
-                        identity.AddClaim(new Claim("PacienteId", usuarioVM.Id.ToString()));
+                        identity.AddClaim(new Claim("ClinicaId", usuarioVM.Id.ToString()));
                         //identity.AddClaim(new Claim("Administrador", usuarioVM.UsuarioAcessos.Any(x => x.AdministradorSistema).ToString()));
                         Thread.CurrentPrincipal = new GenericPrincipal(identity, claims.ToArray());
                         context.Validated(identity);

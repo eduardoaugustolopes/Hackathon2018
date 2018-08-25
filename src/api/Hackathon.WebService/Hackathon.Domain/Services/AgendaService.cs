@@ -53,6 +53,40 @@ namespace Hackathon.Domain.Services
             }
         }
 
+        public List<Agenda> GetAgendaClinica(int clinicaLogadoId, int medicoId, string data)
+        {
+            try
+            {
+                var agendas = new List<Agenda>();
+
+                _dataContext.BeginTransaction();
+
+                agendas = _agendaRepository.Get(_dataContext, clinicaLogadoId, medicoId, data);
+
+                ResponseService = new ResponseService()
+                {
+                    Type = ResponseTypeEnum.Success,
+                    Message = "Agenda consultada com sucesso."
+                };
+
+                return agendas;
+            }
+            catch (Exception e)
+            {
+                ResponseService = new ResponseService()
+                {
+                    Type = ResponseTypeEnum.Error,
+                    Message = "Houve uma falha ao consultar a agenda."
+                };
+
+                return new List<Agenda>();
+            }
+            finally
+            {
+                _dataContext.Finally();
+            }
+        }
+
         public void Save(Agenda agenda)
         {
             try

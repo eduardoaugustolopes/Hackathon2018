@@ -47,6 +47,39 @@ namespace Hackathon.WebService.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetAgendaClinica")]
+        public HttpResponseMessage GetAgendaClinica(int medicoId, string data)
+        {
+            try
+            {
+                var agendaService = new AgendaService();
+
+                var clinicaLogadoId = ClinicaService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList());
+                var agenda = agendaService.GetAgendaClinica(clinicaLogadoId, medicoId, data);
+
+                if (agendaService.ResponseService.Type.Equals("Error"))
+                {
+                    return Request.CreateErrorResponse(
+                        HttpStatusCode.BadRequest, agendaService.ResponseService.Message);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        Agenda = agenda,
+                        Message = agendaService.ResponseService.Message,
+                        Type = agendaService.ResponseService.Type
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(
+                    HttpStatusCode.BadRequest, "Erro ao recuperar a agenda.");
+            }
+        }
+
         [HttpPost]
         [Route("Save")]
         public HttpResponseMessage Save(Agenda agenda)
@@ -55,7 +88,7 @@ namespace Hackathon.WebService.Controllers
             {
                 var agendaService = new AgendaService();
 
-                agenda.Paciente = new Paciente() { Id = PacienteService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList()) };
+                agenda.Clinica = new Clinica() { Id = ClinicaService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList()) };
 
                 agendaService.Save(agenda);
 
