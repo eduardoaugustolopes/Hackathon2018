@@ -74,11 +74,11 @@
             set { _telefone = value; }
         }
 
-        private string _email = string.Empty;
-        public string Email
+        private string _usuario = string.Empty;
+        public string Usuario
         {
-            get { return _email ?? string.Empty; }
-            set { _email = value; }
+            get { return _usuario ?? string.Empty; }
+            set { _usuario = value; }
         }
 
         private string _senha = string.Empty;

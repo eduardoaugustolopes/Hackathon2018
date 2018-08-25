@@ -36,23 +36,23 @@ const DrawerStack = DrawerNavigator({
                 <View style={styles.line}></View>
                 <View style={styles.defaultFlex}>
                     <View style={styles.flexOptions}>
-                        <View style={styles.imageContentSideDrawer}>
+                        {/* <View style={styles.imageContentSideDrawer}> */}
                             <Image
                                 style={styles.icons}
                                 source={require('./img/icone_engrenagem.png')}
                             />
-                        </View>
+                        {/* </View> */}
                         <TouchableOpacity style={styles.imageContentSideDrawer}>
                             <Text onPress={() => props.navigation.navigate('Configuracao')} style={styles.sidedrawerOption}>Configuração</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.flexOptions}>
-                        <View style={styles.imageContentSideDrawer}>
+                        {/* <View style={styles.imageContentSideDrawer}> */}
                             <Image
                                 style={styles.icons}
                                 source={require('./img/icone_sair.png')}
                             />
-                        </View>
+                        {/* </View> */}
                         <TouchableOpacity style={styles.imageContentSideDrawer}>
                             <Text onPress={async () => {
                                 await AsyncStorage.removeItem("@+Care:usuario");
@@ -78,7 +78,7 @@ const DrawerNavigation = StackNavigator({
         headerMode: 'float',
         transitionConfig: noTransitionConfig,
         navigationOptions: {
-            headerStyle: { backgroundColor: '#00193b' }
+            headerStyle: { backgroundColor: '#0084C1' }
         }
     }
 );
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imageContentSideDrawer: {
-        flex: 0.3,
+        flex: 1,
     },
     buttonFlex: {
         flex: 3,
@@ -161,8 +161,8 @@ const styles = StyleSheet.create({
         marginTop: '2%',
         color: '#023D44',
         fontSize: 18,
-        marginLeft: '15%',
-        flex: 1
+        marginLeft: 8,
+        // flex: 1
     },
     line: {
         borderBottomColor: '#000000',
@@ -171,11 +171,14 @@ const styles = StyleSheet.create({
     },
     flexOptions: {
         flexDirection: 'row',
-        flex: 2,
+        height: 40,
+        // flex: 2,
     },
     icons: {
         width: 25,
-        height: 25
+        height: 25,
+        marginLeft: 10,
+        marginTop: 10,
     },
     defaultFlex: {
         flex: 1

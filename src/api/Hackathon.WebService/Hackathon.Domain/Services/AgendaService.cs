@@ -11,11 +11,15 @@ namespace Hackathon.Domain.Services
         public ResponseService ResponseService;
         private DataContext _dataContext;
         private AgendaRepository _agendaRepository;
+        private MedicoRepository _medicoRepository;
+        private PacienteRepository _pacienteRepository;
 
         public AgendaService()
         {
             _dataContext = new DataContext();
             _agendaRepository = new AgendaRepository();
+            _medicoRepository = new MedicoRepository();
+            _pacienteRepository = new PacienteRepository();
             ResponseService = new ResponseService();
         }
 
@@ -53,11 +57,48 @@ namespace Hackathon.Domain.Services
             }
         }
 
+        public List<Agenda> GetAgendaClinica(int clinicaLogadoId, int medicoId, string data)
+        {
+            try
+            {
+                var agendas = new List<Agenda>();
+
+                _dataContext.BeginTransaction();
+
+                agendas = _agendaRepository.Get(_dataContext, clinicaLogadoId, medicoId, data);
+
+                ResponseService = new ResponseService()
+                {
+                    Type = ResponseTypeEnum.Success,
+                    Message = "Agenda consultada com sucesso."
+                };
+
+                return agendas;
+            }
+            catch (Exception e)
+            {
+                ResponseService = new ResponseService()
+                {
+                    Type = ResponseTypeEnum.Error,
+                    Message = "Houve uma falha ao consultar a agenda."
+                };
+
+                return new List<Agenda>();
+            }
+            finally
+            {
+                _dataContext.Finally();
+            }
+        }
+
         public void Save(Agenda agenda)
         {
             try
             {
                 _dataContext.BeginTransaction();
+
+                agenda.Medico = _medicoRepository.Get(_dataContext, agenda.Medico.Crm);
+                agenda.Paciente = _pacienteRepository.Get(_dataContext, agenda.Paciente.Cpf);
 
                 if (ValidaAgenda(agenda))
                 {

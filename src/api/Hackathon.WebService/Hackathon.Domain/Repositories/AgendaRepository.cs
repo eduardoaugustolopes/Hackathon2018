@@ -223,5 +223,87 @@ namespace Hackathon.Domain.Repositories
             }
             return agendas;
         }
+
+        public List<Agenda> Get(DataContext dataContext, int clinicaLogadoId, int medicoId, string data)
+        {
+            var agendas = new List<Agenda>();
+            var dataTable = new DataTable();
+            var query = new StringBuilder();
+            query.Append(" SELECT                        ");
+            query.Append(" a.agenda_id,                  ");
+            query.Append(" c.clinica_id,                 ");
+            query.Append(" c.nome as nome_clinica,       ");
+            query.Append(" c.logradouro,                 ");
+            query.Append(" c.numero,                     ");
+            query.Append(" c.complemento,                ");
+            query.Append(" m.medico_id,                  ");
+            query.Append(" m.nome as nome_medico,        ");
+            query.Append(" p.paciente_id,                ");
+            query.Append(" p.nome as nome_paciente,      ");
+            query.Append(" a.data_hora_marcado,          ");
+            query.Append(" a.data_hora_inicio,           ");
+            query.Append(" a.data_hora_concluido,        ");
+            query.Append(" a.tempo_estimado,             ");
+            query.Append(" a.status                      ");
+            query.Append(" FROM agenda a                 ");
+            query.Append(" LEFT JOIN                     ");
+            query.Append(" clinica c                     ");
+            query.Append(" ON                            ");
+            query.Append(" a.clinica_id = c.clinica_id   ");
+            query.Append(" LEFT JOIN                     ");
+            query.Append(" medico m                      ");
+            query.Append(" ON                            ");
+            query.Append(" a.medico_id = m.medico_id     ");
+            query.Append(" LEFT JOIN                     ");
+            query.Append(" paciente p                    ");
+            query.Append(" ON                            ");
+            query.Append(" a.paciente_id = p.paciente_id ");
+            query.Append(" WHERE                         ");
+            query.Append(" a.clinica_id = ?clinica_id    ");
+            query.Append(" AND                           ");
+            query.Append(" a.medico_id = ?medico_id      ");
+            query.Append(" AND                                                                                     ");
+            query.Append(" CONVERT(DATE_FORMAT(a.data_hora_marcado, '%d/%m/%Y'), CHAR(20)) LIKE ?data_hora_marcado ");
+            var mySqlCommand = new MySqlCommand(query.ToString());
+            mySqlCommand.Parameters.AddWithValue("?clinica_id", clinicaLogadoId);
+            mySqlCommand.Parameters.AddWithValue("?medico_id", medicoId);
+            mySqlCommand.Parameters.AddWithValue("?data_hora_marcado", data);
+
+            dataContext.ExecuteReader(mySqlCommand, dataTable);
+
+            for (var i = 0; dataTable.Rows.Count > i; i++)
+            {
+                var row = dataTable.Rows[i];
+
+                agendas.Add(new Agenda()
+                {
+                    Id = Convert.ToInt32(row["agenda_id"]),
+                    Clinica = new Clinica()
+                    {
+                        Id = Convert.ToInt32(row["clinica_id"]),
+                        Nome = row["nome_clinica"].ToString(),
+                        Logradouro = row["logradouro"].ToString(),
+                        Numero = row["numero"].ToString(),
+                        Complemento = row["complemento"].ToString()
+                    },
+                    Medico = new Medico()
+                    {
+                        Id = Convert.ToInt32(row["medico_id"]),
+                        Nome = row["nome_medico"].ToString()
+                    },
+                    Paciente = new Paciente()
+                    {
+                        Id = Convert.ToInt32(row["paciente_id"]),
+                        Nome = row["nome_paciente"].ToString()
+                    },
+                    DataHoraMarcada = Convert.ToDateTime(row["data_hora_marcado"]),
+                    DataHoraInicio = Convert.ToDateTime(row["data_hora_inicio"]),
+                    DataHoraConcluido = Convert.ToDateTime(row["data_hora_concluido"]),
+                    Status = (StatusEnum) Convert.ToInt32(row["status"]),
+                    TempoEstimado = row["tempo_estimado"].ToString()
+                });
+            }
+            return agendas;
+        }
     }
 }

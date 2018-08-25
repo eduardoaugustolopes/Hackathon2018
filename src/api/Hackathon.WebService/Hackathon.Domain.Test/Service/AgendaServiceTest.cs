@@ -19,6 +19,14 @@ namespace Hackathon.Domain.Test.Service
             Assert.AreEqual(ResponseTypeEnum.Success, agendaService.ResponseService.Type);
         }
 
+        [TestMethod, TestCategory("[Agenda] 2. Service Agenda")]
+        public void Agenda_Get_Clinica()
+        {
+            var agenda = agendaService.GetAgendaClinica(1, 1, "26/08/2018");
+
+            Assert.AreEqual(ResponseTypeEnum.Success, agendaService.ResponseService.Type);
+        }
+
         [TestMethod, TestCategory("[Agenda] 1. Service Agenda")]
         public void Agenda_Add_ComSucesso()
         {
@@ -30,11 +38,11 @@ namespace Hackathon.Domain.Test.Service
                 },
                 Medico = new Medico()
                 {
-                    Id = 2
+                    Crm = "cdr"
                 },
                 Paciente = new Paciente()
                 {
-                    Id = 1
+                    Cpf = "10408910631"
                 },
                 DataHoraMarcada = new DateTime(2018, 08, 26, 14, 0, 0),
                 TempoEstimado = "00:30:00"
