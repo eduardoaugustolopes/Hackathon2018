@@ -12,7 +12,13 @@ import {
 } from 'react-native';
 
 class Configuração extends Component {
+    render() {
+        return (
+            <View>
 
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({

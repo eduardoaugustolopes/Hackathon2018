@@ -1,6 +1,6 @@
 import React from 'react';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
-import { Image, Animated, Easing, Text, StyleSheet, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Image, Animated, Easing, Text, StyleSheet, View, ImageBackground, TouchableOpacity, AsyncStorage } from 'react-native';
 
 import Login from './components/Login';
 import Home from './components/Home';
@@ -23,26 +23,43 @@ const DrawerStack = DrawerNavigator({
         drawerCloseRoute: 'DrawerClose',
         drawerToggleRoute: 'DrawerToggle',
         contentComponent: (props) => (
-            <View style={{ position: 'absolute' }}>
-                <ImageBackground style={styles.imageBackground} source={require('./img/banner.png')}>
-                    <View style={styles.imageContentSideDrawer}>
+            <View style={styles.container}>
+                <View style={styles.textContentSideDrawer}>
+                    <View style={styles.mainImageContentSideDrawer}>
                         <Image
                             style={styles.image}
-                            source={require('./img/100melhores-instituicao.png')}
+                            source={require('./img/icone_user.png')}
                         />
                     </View>
-                    <View style={styles.textContentSideDrawer}>
-                        <Text style={styles.userName}>Nome do usuário</Text>
-                        <Text style={styles.userPhone}>(037) 99999-9999</Text>
+                    <View style={styles.textFlex}><Text style={styles.text}>Nome do usuário</Text></View>
+                </View>
+                <View style={styles.line}></View>
+                <View style={styles.defaultFlex}>
+                    <View style={styles.flexOptions}>
+                        <View style={styles.imageContentSideDrawer}>
+                            <Image
+                                style={styles.icons}
+                                source={require('./img/icone_engrenagem.png')}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.imageContentSideDrawer}>
+                            <Text onPress={() => props.navigation.navigate('Configuracao')} style={styles.sidedrawerOption}>Configuração</Text>
+                        </TouchableOpacity>
                     </View>
-                </ImageBackground>
-                <View sytle={styles.sidedrawerFirstOptions}>
-                    <TouchableOpacity><Text onPress={() => props.navigation.navigate('Configuração')} style={styles.sidedrawerOption}>Conficuração</Text></TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text onPress={async () => {
-                            props.navigation.navigate('loginScreen');
-                        }} style={styles.sidedrawerOption}>Sair</Text>
-                    </TouchableOpacity>
+                    <View style={styles.flexOptions}>
+                        <View style={styles.imageContentSideDrawer}>
+                            <Image
+                                style={styles.icons}
+                                source={require('./img/icone_sair.png')}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.imageContentSideDrawer}>
+                            <Text onPress={async () => {
+                                await AsyncStorage.removeItem("@+Care:usuario");
+                                props.navigation.navigate('loginScreen');
+                            }} style={styles.sidedrawerOption}>Sair</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         )
@@ -104,58 +121,63 @@ const PrimaryNav = StackNavigator({
 export default PrimaryNav;
 
 const styles = StyleSheet.create({
-    headerTitle: {
-        fontFamily: 'Raleway Regular',
-        fontSize: 20,
-        marginLeft: 5,
-        color: '#FFFFFF'
-    },
     imageBackground: {
         width: '200%',
     },
     image: {
-        width: 88,
-        height: 100,
+        width: 50,
+        height: 50
+    },
+    mainImageContentSideDrawer: {
+        flex: 1,
     },
     imageContentSideDrawer: {
-        marginTop: '4%',
-        paddingLeft: '11%',
+        flex: 0.3,
     },
-    userName: {
-        color: '#ffffff',
-        fontSize: 18,
+    buttonFlex: {
+        flex: 3,
+    },
+    text: {
+        color: '#000000',
+        fontSize: 20,
         fontWeight: 'bold',
     },
-    userPhone: {
-        color: '#ffffff',
-        fontSize: 15,
+    textFlex: {
+        flex: 3
     },
     textContentSideDrawer: {
-        marginTop: 20,
-        justifyContent: 'center',
-        marginBottom: 10,
-        marginLeft: '10%',
+        flexDirection: 'row',
+        flex: 0.2,
+        marginLeft: '2%',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     container: {
-        flex: 1,
-        backgroundColor: '#f6f6f6',
-        paddingTop: 20,
-        paddingHorizontal: 20
-    },
-    sidedrawerOptions: {
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        flex: 0.25,
+        backgroundColor: '#ffffff',
+        paddingTop: '10%',
     },
     sidedrawerOption: {
-        marginTop: 15,
+        marginTop: '2%',
         color: '#023D44',
-        fontSize: 20,
-        marginLeft: 60,
+        fontSize: 18,
+        marginLeft: '15%',
+        flex: 1
     },
-    sidedrawerDiferentOption: {
-        marginTop: 50,
-        color: '#023D44',
-        fontSize: 20,
-        marginLeft: 60,
-    }
+    line: {
+        borderBottomColor: '#000000',
+        borderBottomWidth: 1,
+        flex: 1
+    },
+    flexOptions: {
+        flexDirection: 'row',
+        flex: 2,
+    },
+    icons: {
+        width: 25,
+        height: 25
+    },
+    defaultFlex: {
+        flex: 1
+    },
 });
