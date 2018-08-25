@@ -66,6 +66,7 @@
     <Compile Include="Repositories\AgendaRepository.cs" />
     <Compile Include="Repositories\ClinicaRepository.cs" />
     <Compile Include="Repositories\DataContext.cs" />
+    <Compile Include="Repositories\MedicoRepository.cs" />
     <Compile Include="Repositories\PacienteRepository.cs" />
     <Compile Include="Services\AgendaService.cs" />
     <Compile Include="Services\ClinicaService.cs" />

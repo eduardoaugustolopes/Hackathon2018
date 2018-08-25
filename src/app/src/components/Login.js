@@ -98,6 +98,7 @@ class Login extends Component {
                         placeholder="CPF"
                         keyboardType="numeric"
                         placeholderTextColor="#606062"
+                        underlineColorAndroid="transparent"
                         onChangeText={(formatted, extracted) => {
                             this.setState({ cpf: extracted })
                         }}
@@ -110,6 +111,7 @@ class Login extends Component {
                         secureTextEntry={true}
                         placeholder="Senha"
                         placeholderTextColor="#606062"
+                        underlineColorAndroid="transparent"
                         onChangeText={(text) => this.setState({ senha: text })}
                     />
                 </View>

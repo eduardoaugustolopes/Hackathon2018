@@ -38,11 +38,11 @@ namespace Hackathon.Domain.Test.Service
                 },
                 Medico = new Medico()
                 {
-                    Id = 2
+                    Crm = "cdr"
                 },
                 Paciente = new Paciente()
                 {
-                    Id = 1
+                    Cpf = "10408910631"
                 },
                 DataHoraMarcada = new DateTime(2018, 08, 26, 14, 0, 0),
                 TempoEstimado = "00:30:00"

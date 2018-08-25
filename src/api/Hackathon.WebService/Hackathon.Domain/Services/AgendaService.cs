@@ -11,11 +11,15 @@ namespace Hackathon.Domain.Services
         public ResponseService ResponseService;
         private DataContext _dataContext;
         private AgendaRepository _agendaRepository;
+        private MedicoRepository _medicoRepository;
+        private PacienteRepository _pacienteRepository;
 
         public AgendaService()
         {
             _dataContext = new DataContext();
             _agendaRepository = new AgendaRepository();
+            _medicoRepository = new MedicoRepository();
+            _pacienteRepository = new PacienteRepository();
             ResponseService = new ResponseService();
         }
 
@@ -92,6 +96,9 @@ namespace Hackathon.Domain.Services
             try
             {
                 _dataContext.BeginTransaction();
+
+                agenda.Medico = _medicoRepository.Get(_dataContext, agenda.Medico.Crm);
+                agenda.Paciente = _pacienteRepository.Get(_dataContext, agenda.Paciente.Cpf);
 
                 if (ValidaAgenda(agenda))
                 {

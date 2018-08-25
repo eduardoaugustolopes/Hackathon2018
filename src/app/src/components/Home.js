@@ -26,7 +26,7 @@ class Home extends Component {
 
     _confirmaConsulta = async (id) => {
         this.setState({ ready: false });
-        
+
         var token = await AsyncStorage.getItem("@+Care:usuario")
         var self = this;
         await axios.post(`http://192.168.0.135:9591/Api/Agenda/Confirma?agendaId=${id}`, {}, {
@@ -44,7 +44,29 @@ class Home extends Component {
             })
 
         this.setState({ ready: true });
-      };
+    };
+
+    _cancelaConsulta = async (id) => {
+        this.setState({ ready: false });
+
+        var token = await AsyncStorage.getItem("@+Care:usuario")
+        var self = this;
+        await axios.post(`http://192.168.0.135:9591/Api/Agenda/Cancela?agendaId=${id}`, {}, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(function (response) {
+                self.setState({ Agenda: response.data.Agenda })
+                // alert(self.state.Agenda[0].Clinica.Nome)
+            })
+            .catch(function (error) {
+                alert(error.message)
+            })
+
+        this.setState({ ready: true });
+    };
 
     static navigationOptions = {
         headerTitle: <Text style={{
@@ -56,6 +78,20 @@ class Home extends Component {
         }}
         >Suas Consultas</Text>
     }
+
+    _getFullDate = (data) => {
+        var dataFull = ""
+        
+        var days = ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sabado"];
+        dataFull += days[new Date(data).getDay()] + ", ";
+        dataFull += new Date(data).getDate() + " de ";
+        var months = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+        dataFull += months[new Date(data).getMonth()] + ", às ";
+        dataFull += new Date(data).getUTCHours() + ":";
+        dataFull += (new Date(data).getUTCMinutes() < 10 ? "0" : "") + (new Date(data).getUTCMinutes()) + "h";
+
+        return dataFull;
+    };
 
     async componentDidMount() {
         this.setState({ ready: false });
@@ -95,7 +131,7 @@ class Home extends Component {
                             <Text style={styles.agendaClinica}>{ag.Clinica.Nome}</Text>
                             <Text style={styles.agendaMedico}>{ag.Medico.Nome}</Text>
                             <Text style={styles.agendaEndereco}>{ag.Clinica.Logradouro}, {ag.Clinica.Numero}, {ag.Clinica.Complemento}</Text>
-                            <Text style={styles.agendaEndereco}>{Date(ag.DataHoraMarcada)}</Text>
+                            <Text style={styles.agendaEndereco}>{this._getFullDate(ag.DataHoraMarcada)}</Text>
 
                             {ag.Status == 0 ?
                                 (<View style={styles.buttonContainer}>
@@ -108,7 +144,7 @@ class Home extends Component {
 
                                     <TouchableOpacity
                                         style={styles.button}
-                                        onPress={() => this.props.onAdd(this.state.newRepoText)}
+                                        onPress={() => this._cancelaConsulta(ag.Id)}
                                     >
                                         <Text style={styles.buttonText}>Não vou!</Text>
                                     </TouchableOpacity>
