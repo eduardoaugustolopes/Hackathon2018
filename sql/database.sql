@@ -7,6 +7,7 @@ CREATE TABLE clinica(
     logradouro varchar(100) NOT NULL DEFAULT '',
     numero varchar(10) NOT NULL DEFAULT '',
     bairro varchar(50) NOT NULL DEFAULT '',
+    complemento varchar(100) NOT NULL DEFAULT '',
     cep varchar(10) NOT NULL DEFAULT '',
     cidade varchar(50) NOT NULL DEFAULT '',
     uf char(2) NOT NULL DEFAULT '',
@@ -23,8 +24,9 @@ CREATE TABLE paciente(
     nome varchar(100) NOT NULL DEFAULT '',
     telefone varchar(50) NOT NULL DEFAULT '',
 	logradouro varchar(100) NOT NULL DEFAULT '',
-    numero varchar(10) NOT NULL DEFAULT '',
+	numero varchar(10) NOT NULL DEFAULT '',
     bairro varchar(50) NOT NULL DEFAULT '',
+    complemento varchar(100) NOT NULL DEFAULT '',
     cep varchar(10) NOT NULL DEFAULT '',
     cidade varchar(50) NOT NULL DEFAULT '',
     uf char(2) NOT NULL DEFAULT '',
@@ -50,26 +52,29 @@ CREATE TABLE especialidade(
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE medico_especialidade(
-    medico_especialidade_id integer NOT NULL,
-    medico_id integer NOT NULL,
+    medico_especialidade_id integer NOT NULL DEFAULT 0,
+    medico_id integer NOT NULL DEFAULT 0,
     PRIMARY KEY pk_medico_especialidade (medico_especialidade_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE clinica_medico(
-    clinica_id integer NOT NULL,
-    medico_id integer NOT NULL,
+    clinica_id integer NOT NULL DEFAULT 0,
+    medico_id integer NOT NULL DEFAULT 0,
     PRIMARY KEY pk_clinica_medico (clinica_id, medico_id),
     KEY k_clinica_medico_1 (clinica_id),
     KEY k_clinica_medico_2 (medico_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE agenda(
-    agenda_id integer NOT NULL,
-    clinica_id integer NOT NULL,
-    medico_id integer NOT NULL,
-    paciente_id integer NOT NULL,
+    agenda_id integer NOT NULL AUTO_INCREMENT,
+    clinica_id integer NOT NULL DEFAULT 0,
+    medico_id integer NOT NULL DEFAULT 0,
+    paciente_id integer NOT NULL DEFAULT 0,
     data_hora_marcado datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
     data_hora_inicio datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
+    data_hora_concluido datetime NOT NULL DEFAULT '1900-01-01 00:00:00',
+    status integer NOT NULL DEFAULT 0,
+    concluido tinyint(1) NOT NULL DEFAULT 0,
     tempo_estimado time NOT NULL DEFAULT '00:00:00',
     PRIMARY KEY pk_agenda (agenda_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
