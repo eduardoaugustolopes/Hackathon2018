@@ -87,8 +87,10 @@ namespace Hackathon.WebService.Controllers
             try
             {
                 var agendaService = new AgendaService();
+                var pacienteLogadoId = PacienteService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList());
 
                 agendaService.Confirma(agendaId);
+                var agenda = agendaService.Get(pacienteLogadoId);
 
                 if (agendaService.ResponseService.Type == ResponseTypeEnum.Error)
                 {
@@ -99,6 +101,7 @@ namespace Hackathon.WebService.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
+                        Agenda = agenda,
                         Message = agendaService.ResponseService.Message,
                         Type = agendaService.ResponseService.Type.ToString(),
                         Fields = agendaService.ResponseService.FieldsInvalids
@@ -118,8 +121,10 @@ namespace Hackathon.WebService.Controllers
             try
             {
                 var agendaService = new AgendaService();
+                var pacienteLogadoId = PacienteService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList());
 
                 agendaService.Inicia(agendaId);
+                var agenda = agendaService.Get(pacienteLogadoId);
 
                 if (agendaService.ResponseService.Type == ResponseTypeEnum.Error)
                 {
@@ -130,6 +135,7 @@ namespace Hackathon.WebService.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
+                        Agenda = agenda,
                         Message = agendaService.ResponseService.Message,
                         Type = agendaService.ResponseService.Type.ToString(),
                         Fields = agendaService.ResponseService.FieldsInvalids
@@ -149,8 +155,10 @@ namespace Hackathon.WebService.Controllers
             try
             {
                 var agendaService = new AgendaService();
+                var pacienteLogadoId = PacienteService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList());
 
                 agendaService.Cancela(agendaId);
+                var agenda = agendaService.Get(pacienteLogadoId);
 
                 if (agendaService.ResponseService.Type == ResponseTypeEnum.Error)
                 {
@@ -161,6 +169,7 @@ namespace Hackathon.WebService.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
+                        Agenda = agenda,
                         Message = agendaService.ResponseService.Message,
                         Type = agendaService.ResponseService.Type.ToString(),
                         Fields = agendaService.ResponseService.FieldsInvalids
@@ -180,8 +189,10 @@ namespace Hackathon.WebService.Controllers
             try
             {
                 var agendaService = new AgendaService();
+                var pacienteLogadoId = PacienteService.ObtemUsuarioLogadoId((User.Identity as ClaimsIdentity).Claims.ToList());
 
                 agendaService.Conclui(agendaId);
+                var agenda = agendaService.Get(pacienteLogadoId);
 
                 if (agendaService.ResponseService.Type == ResponseTypeEnum.Error)
                 {
@@ -192,6 +203,7 @@ namespace Hackathon.WebService.Controllers
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, new
                     {
+                        Agenda = agenda,
                         Message = agendaService.ResponseService.Message,
                         Type = agendaService.ResponseService.Type.ToString(),
                         Fields = agendaService.ResponseService.FieldsInvalids

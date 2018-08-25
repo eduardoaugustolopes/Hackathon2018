@@ -78,7 +78,7 @@ const DrawerNavigation = StackNavigator({
         headerMode: 'float',
         transitionConfig: noTransitionConfig,
         navigationOptions: {
-            headerStyle: { backgroundColor: '#00193b' }
+            headerStyle: { backgroundColor: '#0084C1' }
         }
     }
 );

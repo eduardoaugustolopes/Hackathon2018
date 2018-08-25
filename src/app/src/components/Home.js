@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
     StyleSheet,
+    ScrollView,
     View,
     Text,
     TextInput,
@@ -8,7 +9,8 @@ import {
     AsyncStorage,
     ActivityIndicator,
     BackHandler,
-    Button
+    Button,
+    TouchableOpacity
 } from 'react-native';
 
 import axios from 'axios';
@@ -22,14 +24,37 @@ class Home extends Component {
         };
     }
 
+    _confirmaConsulta = async (id) => {
+        this.setState({ ready: false });
+        
+        var token = await AsyncStorage.getItem("@+Care:usuario")
+        var self = this;
+        await axios.post(`http://192.168.0.135:9591/Api/Agenda/Confirma?agendaId=${id}`, {}, {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(function (response) {
+                self.setState({ Agenda: response.data.Agenda })
+                // alert(self.state.Agenda[0].Clinica.Nome)
+            })
+            .catch(function (error) {
+                alert(error.message)
+            })
+
+        this.setState({ ready: true });
+      };
+
     static navigationOptions = {
         headerTitle: <Text style={{
             fontFamily: 'Raleway Regular',
             fontSize: 20,
             marginLeft: 5,
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            backgroundColor: '#0084C1'
         }}
-        >Suas Cosultas</Text>
+        >Suas Consultas</Text>
     }
 
     async componentDidMount() {
@@ -45,7 +70,7 @@ class Home extends Component {
         })
             .then(function (response) {
                 self.setState({ Agenda: response.data.Agenda })
-                alert(self.state.Agenda[0].Clinica.Nome)
+                // alert(self.state.Agenda[0].Clinica.Nome)
             })
             .catch(function (error) {
                 alert(error.message)
@@ -63,13 +88,40 @@ class Home extends Component {
             );
         }
         return (
-            <View style={styles.majorContainer}>
-                {this.state.Agenda.map(index => {
-                    <View>
-                        <Text style={styles.text}>{index.Clinica.Nome}</Text>
+            <ScrollView contentContainerStyle={styles.agendaList}>
+                {this.state.Agenda.map(ag =>
+                    <View style={styles.agenda}>
+                        <View style={styles.agendaInfo}>
+                            <Text style={styles.agendaClinica}>{ag.Clinica.Nome}</Text>
+                            <Text style={styles.agendaMedico}>{ag.Medico.Nome}</Text>
+                            <Text style={styles.agendaEndereco}>{ag.Clinica.Logradouro}, {ag.Clinica.Numero}, {ag.Clinica.Complemento}</Text>
+                            <Text style={styles.agendaEndereco}>{Date(ag.DataHoraMarcada)}</Text>
+
+                            {ag.Status == 0 ?
+                                (<View style={styles.buttonContainer}>
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => this._confirmaConsulta(ag.Id)}
+                                    >
+                                        <Text style={styles.buttonText}>Eu vou!</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() => this.props.onAdd(this.state.newRepoText)}
+                                    >
+                                        <Text style={styles.buttonText}>Não vou!</Text>
+                                    </TouchableOpacity>
+                                </View>)
+                                :
+                                <View style={styles.textoConfirmado}>
+                                    <Text style={styles.agendaConfirmado}>Confirmado</Text>
+                                </View>
+                            }
+                        </View>
                     </View>
-                })}
-            </View>
+                )}
+            </ScrollView>
         )
     }
 }
@@ -81,7 +133,7 @@ const styles = StyleSheet.create({
     },
     majorContainer: {
         flex: 1,
-        flexDirection: 'column',
+        flexDirection: 'row',
         marginBottom: '5%',
         marginTop: '5%',
         marginLeft: '5%',
@@ -122,7 +174,81 @@ const styles = StyleSheet.create({
     marginContent: {
         marginLeft: '5%',
         marginRight: '5%'
-    }
+    },
+
+    agendaList: {
+        padding: 0
+    },
+
+    agenda: {
+        padding: 20,
+        backgroundColor: '#fff',
+        height: 120,
+        // marginBottom: 20,
+        borderRadius: 5,
+        borderBottomColor: '#000',
+        borderBottomWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+    },
+
+    agendaInfo: {
+        width: '100%',
+    },
+
+    agendaClinica: {
+        marginLeft: 10,
+    },
+
+    agendaClinica: {
+        fontSize: 12,
+        // fontWeight: 'bold',
+        color: '#333'
+    },
+
+    agendaMedico: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333'
+    },
+
+    agendaLogradouro: {
+        fontSize: 14,
+        color: '#333'
+    },
+
+    agendaConfirmado: {
+        fontSize: 14,
+        color: '#0f0',
+        alignItems: 'flex-end',
+        fontWeight: 'bold',
+    },
+
+    textoConfirmado: {
+        height: 20,
+        flexDirection: 'row',
+        paddingLeft: '75%'
+    },
+
+    buttonContainer: {
+        height: 20,
+        flexDirection: 'row',
+        paddingLeft: '60%'
+    },
+
+    button: {
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        borderRadius: 3,
+    },
+
+    buttonText: {
+        fontWeight: 'bold',
+        color: '#0084C1',
+        fontSize: 14,
+    },
 });
 
 export default Home;
